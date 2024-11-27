@@ -55,16 +55,16 @@ class TicTacToe {
     public void play() {
         int currentPlayer = 0;
 
-        while (!isGameFinished()) {
+        while (!board.isGameFinished()) {
             ClearConsole.clearConsole();
             players.get(currentPlayer % 2).makeMove();
             currentPlayer++;
         }
 
         ClearConsole.clearConsole();
-        if (winsPlayer1()) {
+        if (board.winsPlayer1()) {
             System.out.println("< Player 1 wins! >\n");
-        } else if (winsPlayer2()) {
+        } else if (board.winsPlayer2()) {
             System.out.println("< Player 2 wins! >\n");
         } else {
             System.out.println("< It is a tie! >\n");
@@ -79,34 +79,5 @@ class TicTacToe {
                 player.scanner.close();
             }
         });
-    }
-
-    public boolean isGameFinished() {
-        return winsPlayer1() || winsPlayer2() || isTie();
-    }
-
-    public boolean isTie() {
-        return !winsPlayer1() && !winsPlayer2() && board.isFullBoard();
-    }
-
-    public boolean winsPlayer1() {
-        return winsPlayerWithSymbol("X");
-    }
-
-    public boolean winsPlayer2() {
-        return winsPlayerWithSymbol("O");
-    }
-
-    public boolean winsPlayerWithSymbol(String symbol) {
-        return board.getField(0, 0) == symbol && board.getField(0, 1) == symbol && board.getField(0, 2) == symbol
-                || board.getField(1, 0) == symbol && board.getField(1, 1) == symbol && board.getField(1, 2) == symbol
-                || board.getField(2, 0) == symbol && board.getField(2, 1) == symbol && board.getField(2, 2) == symbol
-
-                || board.getField(0, 0) == symbol && board.getField(1, 0) == symbol && board.getField(2, 0) == symbol
-                || board.getField(0, 1) == symbol && board.getField(1, 1) == symbol && board.getField(2, 1) == symbol
-                || board.getField(0, 2) == symbol && board.getField(1, 2) == symbol && board.getField(2, 2) == symbol
-
-                || board.getField(0, 0) == symbol && board.getField(1, 1) == symbol && board.getField(2, 2) == symbol
-                || board.getField(0, 2) == symbol && board.getField(1, 1) == symbol && board.getField(2, 0) == symbol;
     }
 }

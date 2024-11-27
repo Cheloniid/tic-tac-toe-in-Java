@@ -53,4 +53,33 @@ public class Board {
                 this.boardString[2][2]));
         System.out.println();
     }
+
+    public boolean winsPlayerWithSymbol(String symbol) {
+        return getField(0, 0) == symbol && getField(0, 1) == symbol && getField(0, 2) == symbol
+                || getField(1, 0) == symbol && getField(1, 1) == symbol && getField(1, 2) == symbol
+                || getField(2, 0) == symbol && getField(2, 1) == symbol && getField(2, 2) == symbol
+    
+                || getField(0, 0) == symbol && getField(1, 0) == symbol && getField(2, 0) == symbol
+                || getField(0, 1) == symbol && getField(1, 1) == symbol && getField(2, 1) == symbol
+                || getField(0, 2) == symbol && getField(1, 2) == symbol && getField(2, 2) == symbol
+    
+                || getField(0, 0) == symbol && getField(1, 1) == symbol && getField(2, 2) == symbol
+                || getField(0, 2) == symbol && getField(1, 1) == symbol && getField(2, 0) == symbol;
+    }
+    
+    public boolean winsPlayer1() {
+        return winsPlayerWithSymbol("X");
+    }
+    
+    public boolean winsPlayer2() {
+        return winsPlayerWithSymbol("O");
+    }
+    
+    public boolean isTie() {
+        return !winsPlayer1() && !winsPlayer2() && isFullBoard();
+    }
+    
+    public boolean isGameFinished() {
+        return winsPlayer1() || winsPlayer2() || isTie();
+    }
 }
