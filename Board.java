@@ -1,4 +1,4 @@
-// package PPJ.TicTacToe;
+package PPJ.TicTacToe;
 
 public class Board {
 
