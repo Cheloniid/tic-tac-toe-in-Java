@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class TicTacEngine extends Player {
 
-    final int DELAY = 1000;
+    final int DELAY = 950;
 
     int difficulty;
     List<Move> availableMoves;
