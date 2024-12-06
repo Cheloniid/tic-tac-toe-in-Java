@@ -1,8 +1,15 @@
 package PPJ.TicTacToe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
-    String[][] boardString;
+    private String[][] boardString;
+    public List<Move> availableMoves;
+    private int moveCount;
+    public static int boardCounter = 0;
+
 
     public Board() {
         boardString = new String[3][3];
@@ -11,6 +18,23 @@ public class Board {
                 boardString[i][j] = " ";
             }
         }
+        boardCounter++;
+        availableMoves = new ArrayList<>();
+        moveCount = 0;
+    }
+
+    public Board getCopy(){
+        Board newBoard = new Board();
+        for (int i = 0; i < boardString.length; i++) {
+            for (int j = 0; j < boardString.length; j++) {
+                if (boardString[i][j] == "X"){
+                    newBoard.markOnBoard("X", j, i);
+                } else if (boardString[i][j] == "O"){
+                    newBoard.markOnBoard("O", j, i);
+                }
+            }
+        }
+        return newBoard;
     }
 
     public String getField(int x, int y) {
@@ -18,7 +42,7 @@ public class Board {
     }
 
     public boolean isEmptyField(int x, int y) {
-        return this.boardString[y][x] == " ";
+        return boardString[y][x] == " ";
     }
 
     public boolean isFullBoard() {
@@ -33,8 +57,39 @@ public class Board {
         return isFull;
     }
 
+    public void updateAvailableMoves() {
+        availableMoves.clear();
+        for (int i = 0; i <= 2; i++) {
+            for (int j = 0; j <= 2; j++) {
+                if (this.isEmptyField(i, j)) {
+                    this.availableMoves.add(new Move(i, j));
+                }
+            }
+        }
+    }
+
+    public void displayAvailableMoves(){
+        for (Move move : this.availableMoves){
+            System.out.println("%d, %d wins: %d loses %d ties %d"
+                            .formatted(move.x, move.y, move.wins, move.loses, move.ties));
+        }
+    }
+
     public void markOnBoard(String symbol, int x, int y) {
         this.boardString[y][x] = symbol;
+        this.moveCount++;
+    }
+
+    public void markOnBoard(String symbol, Move move){
+        markOnBoard(symbol, move.x, move.y);
+    }
+
+    public int getMoveCount(){
+        return this.moveCount;
+    }
+
+    public String getCurrentSymbol(){
+        return this.moveCount % 2 == 0 ? "X" : "O";
     }
 
     public void printBoard() {
@@ -51,7 +106,7 @@ public class Board {
                 this.boardString[2][0],
                 this.boardString[2][1],
                 this.boardString[2][2]));
-        System.out.println();
+        System.out.println(boardCounter);
     }
 
     public boolean winsPlayerWithSymbol(String symbol) {
