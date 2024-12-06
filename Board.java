@@ -18,7 +18,7 @@ public class Board {
     }
 
     public boolean isEmptyField(int x, int y) {
-        return this.boardString[y][x] == " ";
+        return boardString[y][x] == " ";
     }
 
     public boolean isFullBoard() {
