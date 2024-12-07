@@ -8,8 +8,11 @@ import java.util.ArrayList;
 public class TicTacEngine extends Player {
 
     final int DELAY = 1000;
+    static final int DEFENSE = 1;
+    static final int OFFENSE = 2;
+    static final int GO_FOR_TIE = 3;
 
-    int difficulty;
+    int engineTactics;
     Random randGen;
 
     public TicTacEngine(Board board, int index) {
@@ -19,19 +22,19 @@ public class TicTacEngine extends Player {
 
         do {
             ClearConsole.clearConsole();
-            System.out.println("< Choose engine (difficulty level) >\n");
+            System.out.println("< Choose engine tactics (difficulty level) >\n");
             System.out.println("0: for very easy (random moves)");
-            System.out.println("1: minimizing lose chance");
-            ClearConsole.putNewLines(4);
+            System.out.println("1: minimizing losing chance");
+            System.out.println("2: maximizing winning chance");
+            System.out.println("3: go for tie");
+            ClearConsole.putNewLines(2);
             System.out.println("Enter your choice: ");
-            difficulty = scanner.nextInt();
-        } while (difficulty != 0 && difficulty != 1);
+            engineTactics = scanner.nextInt();
+        } while (!("0123".contains(String.valueOf(engineTactics))));
     }
 
-    
-
     public void makeMove() {
-        // ClearConsole.clearConsole();
+        ClearConsole.clearConsole();
         System.out.println("< Player's %d move >\n".formatted(playerIndex));
         this.board.printBoard();
         ClearConsole.putNewLines(2);
@@ -43,10 +46,10 @@ public class TicTacEngine extends Player {
         }
 
         // Tutaj wpisz swoje metody przy innych oszacowanych poziomach trudnosci
-        if (difficulty == 0) {
+        if (engineTactics == 0) {
             makeRandomMove();
-        } else if (difficulty == 1) {
-            makePredictiveMove();
+        } else {
+            makePredictiveMove(engineTactics);
         }
     }
 
@@ -58,63 +61,64 @@ public class TicTacEngine extends Player {
                 randomMove.x, randomMove.y);
     }
 
-    public void makePredictiveMove() {
+    public void makePredictiveMove(int engineTactics) {
         board.updateAvailableMoves();
         board.availableMoves.forEach(move -> analyzeMove(move, move, this.board.getCopy()));
         board.availableMoves.forEach(move -> move.predictResults());
-
-        Move lowestLoseChanceMove = board.availableMoves.get(0);
-        for (Move move : board.availableMoves){
-            if (move.loseChance < lowestLoseChanceMove.loseChance){
-                lowestLoseChanceMove = move;
+        
+        Move selectedMove = board.availableMoves.get(0);
+        
+        if (engineTactics == TicTacEngine.DEFENSE) {
+            for (Move move : board.availableMoves) {
+                if (move.loseChance < selectedMove.loseChance) {
+                    selectedMove = move;
+                }
+            }
+        } else if (engineTactics == TicTacEngine.OFFENSE){
+            for (Move move : board.availableMoves) {
+                if (move.winChance > selectedMove.winChance) {
+                    selectedMove = move;
+                }
+            }
+        } else if (engineTactics == TicTacEngine.GO_FOR_TIE) {
+            for (Move move : board.availableMoves) {
+                if (move.tieChance > selectedMove.tieChance) {
+                    selectedMove = move;
+                }
             }
         }
-        board.displayAvailableMoves();
+
         board.markOnBoard(playerIndex == 1 ? "X" : "O",
-                lowestLoseChanceMove.x, lowestLoseChanceMove.y);
+                selectedMove.x, selectedMove.y);
     }
 
-    public void analyzeMove(Move assessedMove, Move nextMove, Board board){
+    public void analyzeMove(Move assessedMove, Move nextMove, Board board) {
         board.markOnBoard(board.getCurrentSymbol(), nextMove);
-        System.out.println("Analyzing move: " + nextMove.x + nextMove.y);
 
-        if (board.isGameFinished())
-            System.out.println("Isgamefinished");
-            if (board.isTie()){
+        if (board.isGameFinished()) {
+            if (board.isTie()) {
                 assessedMove.ties++;
-            } else if (playerIndex == 1){
-                if (board.winsPlayer1()){
+            } else if (playerIndex == 1) {
+                if (board.winsPlayer1()) {
                     assessedMove.wins++;
-                } else if (board.winsPlayer2()){
+                } else if (board.winsPlayer2()) {
                     assessedMove.loses++;
                 }
             } else if (playerIndex == 2) {
-                if (board.winsPlayer2()){
+                if (board.winsPlayer2()) {
                     assessedMove.wins++;
-                } else if (board.winsPlayer1()){
+                } else if (board.winsPlayer1()) {
                     assessedMove.loses++;
                 }
             }
-        else {
+        } else {
             board.updateAvailableMoves();
-            System.out.println("INSIDE ELSE");
-            for (Move move : board.availableMoves){
+            for (Move move : board.availableMoves) {
                 analyzeMove(assessedMove, move, board.getCopy());
             }
-        } 
-        
-    }
-    public static void main(String[] args) {
-        Board b = new Board();
-        b.printBoard();
-        b.updateAvailableMoves();
-        TicTacEngine t = new TicTacEngine(b, 1);
-        for (Move m: b.availableMoves){
-            t.analyzeMove(m, m, b);
         }
-        b.displayAvailableMoves();
-    }
 
+    }
     // Tutaj dodaj swoje metody
 
 }
@@ -137,12 +141,11 @@ class Move {
         this.ties = 0;
     }
 
-    public void predictResults(){
+    public void predictResults() {
         this.winChance = (wins + loses + ties) == 0 ? 0 : wins / (wins + loses + ties);
         this.loseChance = (wins + loses + ties) == 0 ? 0 : loses / (wins + loses + ties);
         this.tieChance = (wins + loses + ties) == 0 ? 0 : ties / (wins + loses + ties);
         System.out.println(wins + loses + ties);
     }
 
-    
 }

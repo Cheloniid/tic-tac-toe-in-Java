@@ -106,7 +106,7 @@ public class Board {
                 this.boardString[2][0],
                 this.boardString[2][1],
                 this.boardString[2][2]));
-        System.out.println(boardCounter);
+        System.out.println("Boards created: " + boardCounter);
     }
 
     public boolean winsPlayerWithSymbol(String symbol) {

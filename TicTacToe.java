@@ -18,7 +18,7 @@ class TicTacToe {
         this.players = new ArrayList<>();
         this.scanner = new Scanner(System.in);
 
-        // ClearConsole.clearConsole();
+        ClearConsole.clearConsole();
         int choice1;
         do {
             System.out.print("< Choose player 1 (X) >");
@@ -32,7 +32,7 @@ class TicTacToe {
         player1 = choice1 == 1 ? new LocalPlayer(board, 1) : new TicTacEngine(board, 1);
         players.add(player1);
 
-        // ClearConsole.clearConsole();
+        ClearConsole.clearConsole();
         int choice2;
         do {
             System.out.print("< Choose player 2 (O) >");
@@ -50,11 +50,11 @@ class TicTacToe {
     public void play() {
 
         while (!board.isGameFinished()) {
-            // ClearConsole.clearConsole();
+            ClearConsole.clearConsole();
             players.get(board.getMoveCount() % 2).makeMove();
         }
 
-        // ClearConsole.clearConsole();
+        ClearConsole.clearConsole();
         if (board.winsPlayer1()) {
             System.out.println("< Player 1 wins! >\n");
         } else if (board.winsPlayer2()) {
