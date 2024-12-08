@@ -129,9 +129,9 @@ class Move {
     int wins;
     int loses;
     int ties;
-    int winChance;
-    int loseChance;
-    int tieChance;
+    double winChance;
+    double loseChance;
+    double tieChance;
 
     public Move(int x, int y) {
         this.x = x;
@@ -142,9 +142,9 @@ class Move {
     }
 
     public void predictResults() {
-        this.winChance = (wins + loses + ties) == 0 ? 0 : wins / (wins + loses + ties);
-        this.loseChance = (wins + loses + ties) == 0 ? 0 : loses / (wins + loses + ties);
-        this.tieChance = (wins + loses + ties) == 0 ? 0 : ties / (wins + loses + ties);
+        this.winChance = (wins + loses + ties) == 0 ? 0 : (double) wins / (double) (wins + loses + ties);
+        this.loseChance = (wins + loses + ties) == 0 ? 0 : (double) loses / (double) (wins + loses + ties);
+        this.tieChance = (wins + loses + ties) == 0 ? 0 : (double) ties / (double) (wins + loses + ties);
         System.out.println(wins + loses + ties);
     }
 
