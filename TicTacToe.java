@@ -47,18 +47,11 @@ class TicTacToe {
         players.add(player2);
     }
 
-    public static void main(String[] args) {
-        TicTacToe ticTacToe = new TicTacToe();
-        ticTacToe.play();
-    }
-
     public void play() {
-        int currentPlayer = 0;
 
         while (!board.isGameFinished()) {
             ClearConsole.clearConsole();
-            players.get(currentPlayer % 2).makeMove();
-            currentPlayer++;
+            players.get(board.getMoveCount() % 2).makeMove();
         }
 
         ClearConsole.clearConsole();
