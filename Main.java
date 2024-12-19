@@ -16,5 +16,5 @@ public class Main {
  * log
  * smarter engine
  * ability to play straight again
- * 
+ * pc playing many times against pc
  */
